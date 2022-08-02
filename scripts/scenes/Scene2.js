@@ -12,6 +12,8 @@ class Scene2 extends Phaser.Scene {
         this.snake = this.physics.add.sprite( config.width / 2 , config.height / 2, 'snake' );
 
         this.cursorKeys = this.input.keyboard.createCursorKeys();
+
+        this.snake.setCollideWorldBounds();
     
     }
 
