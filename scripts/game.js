@@ -1,5 +1,6 @@
 let gameSettings = {
-    playerSpeed: 150
+    playerSpeed: 150,
+    score: 0
 }
 
 let config = {
