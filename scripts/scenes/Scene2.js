@@ -9,11 +9,9 @@ class Scene2 extends Phaser.Scene {
         this.apple = this.physics.add.sprite(config.width / 2 - 50, config.height / 2, "apple");
 
         let appleCount = 0;
-        // used to test if scene 2 is working
         globalThis.score = 0;
         globalThis.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
-        //this.physics.add.staticSprite( config.width / 2 + 50, config.height / 2, 'apple' );
         this.snake = this.physics.add.sprite( config.width / 2 , config.height / 2, 'snake' );
 
         this.cursorKeys = this.input.keyboard.createCursorKeys();
