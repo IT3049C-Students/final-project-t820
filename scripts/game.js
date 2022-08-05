@@ -1,5 +1,6 @@
 let gameSettings = {
     playerSpeed: 150,
+    gridWidth: 32,
     score: 0
 }
 
