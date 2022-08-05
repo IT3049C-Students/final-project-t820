@@ -4,6 +4,7 @@ class Scene2 extends Phaser.Scene {
 
     constructor() {
         super( 'playGame' );
+    
     }
 
     create() {
@@ -23,29 +24,41 @@ class Scene2 extends Phaser.Scene {
         this.snake.setCollideWorldBounds();
 
         this.physics.add.collider(this.snake, this.apple, this.collectApple, null, this)
-        this.newPart = this.physics.add.sprite(this.snake.x, this.snake.y, 'snake');
-    
+        this.newPart  = this.physics.add.sprite(this.snake.x, this.snake.y, 'snake');
+
+
+
+        var container = this.add.container(400,300);
+        var sprite0 = this.add.sprite(-200, 0, 'snake');
+    var sprite1 = this.add.sprite(0, 0, 'snake');
+    var sprite2 = this.add.sprite(200, 0, 'snake');
+    var sprite3 = this.add.sprite(-100, -100, 'snake');
+    var sprite4 = this.add.sprite(100, -100, 'snake');
+    var sprite5 = this.add.sprite(100, 100, 'snake');
+
+    container.add([ sprite0, sprite1, sprite2 ]);
+
+    container.addAt([ sprite3, sprite4, sprite5 ], 0);
+
     }
+
 
     update() {
         this.snakeMoveManager();
         this.follow();
         if(this.snake) {
-
         }
     }
     grow(){
         
-        var newPart2 = this.add.sprite(this.newPart.x,this.newPart.y,'snake')
-    return newPart2;
+        this.newPart = this.physics.add.sprite(this.snake.x,this.snake.y,'snake')
+        this.newPart.setOrigin(0);
+        moveTo(this.snake,this.newPart,300)
     }
     follow(snake,newPart){
-        for (var i=0; i<10; i++)
-        {
-        this.newPart.x  = this.snake.x - 10
-       this.newPart.y = this.snake.y
 
-        }
+    
+
     }
 
 
