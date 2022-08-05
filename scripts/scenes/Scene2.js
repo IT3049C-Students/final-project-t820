@@ -1,3 +1,5 @@
+
+
 class Scene2 extends Phaser.Scene {
 
     constructor() {
@@ -5,39 +7,6 @@ class Scene2 extends Phaser.Scene {
     }
 
     create() {
-
-        var UP = 0;
-        var DOWN = 1;
-        var LEFT = 2;
-        var RIGHT = 3;
-
-        function Snake (scene, x, y)
-        {
-            this.headPosition = new Phaser.Geom.Point(x, y);
-
-            this.body = scene.add.group();
-
-            this.head = this.body.create(x * 16, y * 16, 'body');
-            this.head.setOrigin(0);
-
-            this.alive = true;
-
-            this.speed = 100;
-
-            this.moveTime = 0;
-
-            this.heading = RIGHT;
-            this.direction = RIGHT;
-        }
-
-
-
-
-
-
-
-
-
 
         this.apple = this.physics.add.sprite(config.width / 2 - 50, config.height / 2, "apple");
 
@@ -49,136 +18,45 @@ class Scene2 extends Phaser.Scene {
         //this.physics.add.staticSprite( config.width / 2 + 50, config.height / 2, 'apple' );
         this.snake = this.physics.add.sprite( config.width / 2 , config.height / 2, 'snake' );
 
-        this.tail = new Phaser.Geom.Point(x,y);
-        this.head = this.body.create(x * 16, y * 16, 'snake');
-        this.head.setOrigin(0);
-
         this.cursorKeys = this.input.keyboard.createCursorKeys();
 
         this.snake.setCollideWorldBounds();
 
         this.physics.add.collider(this.snake, this.apple, this.collectApple, null, this)
-
-
-
-
+        this.newPart = this.physics.add.sprite(this.snake.x, this.snake.y, 'snake');
     
     }
 
-    update(time)
-    {
-        if (time >= this.moveTime)
-        {
-            return this.move(time);
-        }
-    }
-
-    faceLeft()
-    {
-        if (this.direction === UP || this.direction === DOWN)
-        {
-            this.heading = LEFT;
-        }
-    }
-
-    faceRight()
-    {
-        if (this.direction === UP || this.direction === DOWN)
-        {
-            this.heading = RIGHT;
-        }
-    }
-
-    faceUp()
-    {
-        if (this.direction === LEFT || this.direction === RIGHT)
-        {
-            this.heading = UP;
-        }
-    }
-
-    faceDown()
-    {
-        if (this.direction === LEFT || this.direction === RIGHT)
-        {
-            this.heading = DOWN;
-        }
-    }
-
-
-    move(time)
-    {
-
-        switch (this.heading)
-        {
-            case LEFT:
-                this.headPosition.x = Phaser.Math.Wrap(this.headPosition.x - 1, 0, 40);
-                break;
-
-            case RIGHT:
-                this.headPosition.x = Phaser.Math.Wrap(this.headPosition.x + 1, 0, 40);
-                break;
-
-            case UP:
-                this.headPosition.y = Phaser.Math.Wrap(this.headPosition.y - 1, 0, 30);
-                break;
-
-            case DOWN:
-                this.headPosition.y = Phaser.Math.Wrap(this.headPosition.y + 1, 0, 30);
-                break;
-        }
-
-        this.direction = this.heading;
-
-    
-        Phaser.Actions.ShiftPosition(this.body.getChildren(), this.headPosition.x * 16, this.headPosition.y * 16, 1);
-
-       
-        this.moveTime = time + this.speed;
-
-        return true;
-    }
-    cursors = this.input.keyboard.createCursorKeys();
-}
-
-function update (time, delta)
-{
-    if (!snake.alive)
-    {
-        return;
-    }
-    if (cursors.left.isDown)
-    {
-        snake.faceLeft();
-    }
-    else if (cursors.right.isDown)
-    {
-        snake.faceRight();
-    }
-    else if (cursors.up.isDown)
-    {
-        snake.faceUp();
-    }
-    else if (cursors.down.isDown)
-    {
-        snake.faceDown();
-    }
-
-    snake.update(time);
-}
-/*
     update() {
         this.snakeMoveManager();
+        this.follow();
         if(this.snake) {
 
         }
     }
-*/
+    grow(){
+        
+        var newPart2 = this.add.sprite(this.newPart.x,this.newPart.y,'snake')
+    return newPart2;
+    }
+    follow(snake,newPart){
+        for (var i=0; i<10; i++)
+        {
+        this.newPart.x  = this.snake.x - 10
+       this.newPart.y = this.snake.y
+
+        }
+    }
+
+
+
     snakeMoveManager() {
         // left and right
         if ( this.cursorKeys.left.isDown ) {
             this.snake.setVelocityY( 0 );
             this.snake.setVelocityX( -gameSettings.playerSpeed );
+            
+            
         } else if ( this.cursorKeys.right.isDown ) {
             this.snake.setVelocityY( 0 );
             this.snake.setVelocityX( gameSettings.playerSpeed );
@@ -192,21 +70,13 @@ function update (time, delta)
             this.snake.setVelocityX( 0 );
             this.snake.setVelocityY( gameSettings.playerSpeed );
         }
-
-
-
     }
 
     collectApple(snake, apple2) {
-
-     /*   if (this.head.x === apple.x && this.head.y === this.apple.y )
-        {
-            this.grow();
-            apple2.collectApple
-        } */
         score += 10;
         scoreText.setText('Score: ' + score);
         this.resetApplePos(apple2);
+        this.grow();
     }
 
     resetApplePos(apple3) {
@@ -217,13 +87,6 @@ function update (time, delta)
         apple3.y = y;
         apple3.x = x;
     }
-    grow()
-    {
-        var newPart = this.snake.create(this.snake.x, this.snake.y, 'snake');
-        newPart.setOrigin(0);
-    }
-
-    
 
 
 
