@@ -12,10 +12,10 @@ class Scene2 extends Phaser.Scene {
     }
 
     create() {
-        console.log(gameSettings.level)
+        console.log("Current Level: " + gameSettings.level)
         this.snakeSize = gameSettings.gridWidth;
         this.timeInterval = gameSettings.playerSpeed;
-        console.log(this.timeInterval)
+        console.log("Curent Player Speed: " + this.timeInterval)
         globalThis.scale = 1;
         if(this.body.length >= 1) {
             this.body = []
@@ -29,7 +29,7 @@ class Scene2 extends Phaser.Scene {
         }
 
         this.levelUpScore = ((totalGridsX * totalGridsY * 10) - (totalGridsX + totalGridsY)*10);
-        console.log(this.levelUpScore)
+        console.log("Score to Level up: " + this.levelUpScore)
 
         this.apple = this.physics.add.sprite(config.width / 2, config.height / 2 - 20, "apple");
         this.apple.setVelocityX(0);
@@ -63,7 +63,7 @@ class Scene2 extends Phaser.Scene {
 
     update(time) {
 
-        if(score == 20) {
+        if(score == this.levelUpScore) {
             this.levelUp();
         }
 
@@ -103,7 +103,7 @@ class Scene2 extends Phaser.Scene {
         }
     }
     gameEnd() {
-        console.log("triggered")
+        console.log("Game end function triggered")
         gameSettings.score = score;
         this.direction = "right";
         this.scene.start( 'endGame' );
