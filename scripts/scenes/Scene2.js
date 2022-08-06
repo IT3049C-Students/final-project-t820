@@ -3,13 +3,13 @@ class Scene2 extends Phaser.Scene {
     constructor() {
         super( 'playGame' );
         this.lastMoveTime = 0;
-        this.timeInterval = 300;
+        this.timeInterval = 200;
         this.direction = "right"
     }
 
     create() {
 
-        this.apple = this.physics.add.sprite(config.width / 2 - 50, config.height / 2, "apple");
+        this.apple = this.physics.add.sprite(config.width / 2, config.height / 2 - 20, "apple");
         this.apple.setVelocityX(0);
         this.apple.setVelocityY(0);
         
@@ -17,7 +17,7 @@ class Scene2 extends Phaser.Scene {
         globalThis.score = 0;
         globalThis.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
 
-        this.snake = this.physics.add.sprite( config.width / 2 , config.height / 2, 'snake' );
+        this.snake = this.physics.add.sprite( /*config.width / 2*/ 40, /*config.height / 2 - 60*/40, 'snake' );
 
         // Tried using a green rectangle as a snake thinking it might make it easier to add a growth function.
         
@@ -50,6 +50,17 @@ class Scene2 extends Phaser.Scene {
             this.lastMoveTime = time;
             this.snakeMoveManager(this.direction);
         }
+
+        // snake ran into wall, reset position of snake
+        // the coordinates code can be replaced by the gameOver function
+        if ( this.snake.x < 40 || this.snake.x > 760 ) {
+            this.snake.x = 40;
+            this.snake.y = 40;
+        } else if ( this.snake.y < 40 || this.snake.y > 560  ) {
+            this.snake.x = 40;
+            this.snake.y = 40;
+        }
+
     }
 
     snakeMoveManager(direction) {
@@ -71,16 +82,13 @@ class Scene2 extends Phaser.Scene {
     }
 
     resetApplePos(apple) {
-        
-        let y = Math.floor(Math.random() * config.height + 40) - 40; 
-        let x = Math.floor(Math.random() * config.width + 40) - 40; 
-        console.log(x + "    " + y);
+        // sets the new apple within the grid that the snake moves through
+        let x = Phaser.Math.Between( 1, 19 ) * 40;
+        let y = Phaser.Math.Between( 1, 14 ) * 40;
         apple.setVelocityX(0);
         apple.setVelocityY(0);
         apple.y = y;
         apple.x = x;
     }
-
-
 
 }
