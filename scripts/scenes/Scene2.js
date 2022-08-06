@@ -65,6 +65,7 @@ class Scene2 extends Phaser.Scene {
             }
         // snake ran into wall, reset position of snake
         // the coordinates code can be replaced by the gameOver function
+        //END GAME HERE
         if ( this.snake.x < 40 || this.snake.x > 760 ) {
             this.snake.x = 40;
             this.snake.y = 40;
@@ -72,7 +73,6 @@ class Scene2 extends Phaser.Scene {
             this.snake.x = 40;
             this.snake.y = 40;
         }
-
     }
 
     snakeMoveManager(direction) {
@@ -121,6 +121,12 @@ class Scene2 extends Phaser.Scene {
                         default: 
                             this.body[index].x = this.body[index - 1].x;
                             this.body[index].y = this.body[index - 1].y;
+                    }
+                    if(this.snake.x == this.body[index].x && this.snake.y == this.body[index].y) {
+                        //END GAME HERE
+                        console.log("game over");
+                        this.snake.x = 40;
+                        this.snake.y = 40;
                     }
                 }
 
