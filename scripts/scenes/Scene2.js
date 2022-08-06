@@ -10,6 +10,9 @@ class Scene2 extends Phaser.Scene {
     }
 
     create() {
+        if(this.body.length >= 1) {
+            this.body = []
+        }
 
         this.apple = this.physics.add.sprite(config.width / 2, config.height / 2 - 20, "apple");
         this.apple.setVelocityX(0);
@@ -19,13 +22,7 @@ class Scene2 extends Phaser.Scene {
         globalThis.score = 0;
         globalThis.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
         globalThis.gameOver = false;
-        globalThis.gameOverText = this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#000' })
-        globalThis.gameOverText.setOrigin(0.5);
-        globalThis.gameOverText.visible = false;
-        globalThis.gameOverScore = this.add.text(400, 400, 'Your Final Score: ', { fontSize: '48px', fill: '#000' })
-        globalThis.gameOverScore.setOrigin(0.5);
-        globalThis.gameOverScore.visible = false;
-        this.snake = this.physics.add.sprite( /*config.width / 2*/ 40, /*config.height / 2 - 60*/40, 'snake' );
+        this.snake = this.physics.add.sprite(  40, 40, 'snake' );
 
         // Tried using a green rectangle as a snake thinking it might make it easier to add a growth function.
         
@@ -72,21 +69,22 @@ class Scene2 extends Phaser.Scene {
         // snake ran into wall, reset position of snake
         // the coordinates code can be replaced by the gameOver function
         //END GAME HERE
-        if ( this.snake.x < 40 || this.snake.x > 760 ) {
+        if ( this.snake.x < 20 || this.snake.x > 760 ) {
             this.gameEnd();
-        } else if ( this.snake.y < 40 || this.snake.y > 560  ) {
+        } else if ( this.snake.y < 20 || this.snake.y > 560  ) {
             this.gameEnd();
         }
     }
     gameEnd() {
+        console.log("triggered")
+        gameSettings.score = score;
+        this.direction = "right";
+        this.scene.start( 'endGame' );
+
         this.physics.pause();
         this.snake.visible = false;
         this.apple.visible = false;
-        globalThis.gameOver = true;
-        globalThis.scoreText.visible = false;
-        globalThis.gameOverText.visible = true;
-        globalThis.gameOverScore.visible = true;
-        globalThis.gameOverScore.setText('Your Final Score: ' + score);
+
         }
     snakeMoveManager(direction) {
         if(this.direction == "left") {
@@ -137,7 +135,6 @@ class Scene2 extends Phaser.Scene {
                     }
                     if(this.snake.x == this.body[index].x && this.snake.y == this.body[index].y) {
                         //END GAME HERE
-                        console.log("game over");
                         this.gameEnd();
                     }
                 }

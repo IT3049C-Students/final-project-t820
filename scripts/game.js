@@ -9,7 +9,7 @@ let config = {
     height: 600,
     backgroundColor: 0x15A1EB,
     autoCenter: true,
-    scene: [ Scene1, Scene2 ],
+    scene: [ Scene1, Scene2, Scene3 ],
     physics: {
         default: 'arcade',
         arcade: {
