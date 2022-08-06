@@ -128,6 +128,7 @@ class Scene2 extends Phaser.Scene {
             this.gameEnd();
 
     }
+}
 
     update(time) {
         if ( this.cursorKeys.left.isDown ) {
@@ -159,6 +160,7 @@ class Scene2 extends Phaser.Scene {
             this.lastMoveTime = time;
             this.snakeMoveManager(this.direction);
         }
+    }
     snakeMoveManager(direction) {
         if(this.direction == "left") {
             this.snake.x -= gameSettings.gridWidth;
@@ -277,10 +279,6 @@ class Scene2 extends Phaser.Scene {
  
      }
 
-    resetApplePos(apple) {
-        // sets the new apple within the grid that the snake moves through
-        let x = Phaser.Math.Between( 1, totalGridsX - 1) * gameSettings.gridWidth;
-        let y = Phaser.Math.Between( 1, totalGridsY - 1) * gameSettings.gridWidth;
 
     resetApplePos(apple) {
         // sets the new apple within the grid that the snake moves through
