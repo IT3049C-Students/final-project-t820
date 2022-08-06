@@ -4,7 +4,9 @@ class Scene2 extends Phaser.Scene {
         super( 'playGame' );
         this.lastMoveTime = 0;
         this.timeInterval = 200;
-        this.direction = "right"
+        this.direction = "right";
+        this.snakeSize = gameSettings.gridWidth;
+        this.body = [];
     }
 
     create() {
@@ -34,23 +36,33 @@ class Scene2 extends Phaser.Scene {
     }
 
     update(time) {
-        if ( this.cursorKeys.left.isDown ) {
-            this.direction = "left"
-        } else if ( this.cursorKeys.right.isDown ) {
-            this.direction = "right"
-        }
 
-        // up and down
-        if ( this.cursorKeys.up.isDown ) {
-            this.direction = "up"
-        } else if ( this.cursorKeys.down.isDown ) {
-            this.direction = "down"
+        if(time > this.lastMoveTime + 50)
+        {
+                if ( this.cursorKeys.left.isDown ) {
+                    if(this.direction != "right") {
+                        this.direction = "left"
+                    }
+            } else if ( this.cursorKeys.right.isDown ) {
+                if(this.direction != "left") {
+                    this.direction = "right"
+                }
+            }
+            // up and down
+            if ( this.cursorKeys.up.isDown ) {
+                if(this.direction != "down") {
+                    this.direction = "up"
+                }
+            } else if ( this.cursorKeys.down.isDown ) {
+                if(this.direction != "up") {
+                    this.direction = "down"
+                }
+            }
         }
-        if(time > this.lastMoveTime + this.timeInterval) {
-            this.lastMoveTime = time;
-            this.snakeMoveManager(this.direction);
-        }
-
+            if(time > this.lastMoveTime + this.timeInterval) {
+                this.lastMoveTime = time;
+                this.snakeMoveManager(this.direction);
+            }
         // snake ran into wall, reset position of snake
         // the coordinates code can be replaced by the gameOver function
         if ( this.snake.x < 40 || this.snake.x > 760 ) {
@@ -64,18 +76,65 @@ class Scene2 extends Phaser.Scene {
     }
 
     snakeMoveManager(direction) {
-            if(this.direction == "left") {
-                this.snake.x -= gameSettings.gridWidth;
-                } else if (direction =="right") {
-                this.snake.x += gameSettings.gridWidth;
-                } else if (direction == "down") {
-                this.snake.y += gameSettings.gridWidth;
+        if(this.direction == "left") {
+            this.snake.x -= gameSettings.gridWidth;
+            } else if (direction =="right") {
+            this.snake.x += gameSettings.gridWidth;
+            } else if (direction == "down") {
+            this.snake.y += gameSettings.gridWidth;
+            } else {
+            this.snake.y -= gameSettings.gridWidth;
+            }
+            for(let index = this.body.length - 1; index >= 0; index--) {
+                if(this.body.length <= 1 || index == 0) {
+                    switch(direction) {
+                        case "left":
+                            this.body[0].x = this.snake.x + this.snakeSize;
+                            this.body[0].y = this.snake.y;
+                            break;
+                        case "right":
+                            this.body[0].x = this.snake.x - this.snakeSize;
+                            this.body[0].y = this.snake.y;
+                            break;
+                        case "down":
+                            this.body[0].x = this.snake.x;
+                            this.body[0].y = this.snake.y - this.snakeSize;
+                            break;
+                        default: 
+                            this.body[0].x = this.snake.x;
+                            this.body[0].y = this.snake.y + this.snakeSize;
+                    }
                 } else {
-                this.snake.y -= gameSettings.gridWidth;
-        }
+                    switch(direction) {
+                        case "left":
+                            this.body[index].x = this.body[index - 1].x;
+                            this.body[index].y = this.body[index - 1].y;
+                            break;
+                        case "right":
+                            this.body[index].x = this.body[index - 1].x;
+                            this.body[index].y = this.body[index - 1].y;
+                            break;
+                        case "down":
+                            this.body[index].x = this.body[index - 1].x;
+                            this.body[index].y = this.body[index - 1].y ;
+                            break;
+                        default: 
+                            this.body[index].x = this.body[index - 1].x;
+                            this.body[index].y = this.body[index - 1].y;
+                    }
+                }
+
+            }
     }
 
     collectApple(snake, apple) {
+
+        if(this.body.length >= 1) {
+            this.body.push(this.add.rectangle(this.body[this.body.length - 1].x, this.body[this.body.length - 1].y, 32, 32, 0x00ffff));
+        } else {
+            this.body.push(this.add.rectangle(this.snake.x, this.snake.y, 32, 32, 0x00ffff));
+        }
+
         score += 10;
         scoreText.setText('Score: ' + score);
         this.resetApplePos(apple);
