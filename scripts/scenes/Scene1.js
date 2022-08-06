@@ -13,6 +13,10 @@ class Scene1 extends Phaser.Scene {
             frameWidth: 40,
             frameHeight: 40
         } );
+        this.load.spritesheet( 'powerUps', 'images/coin.png',  {
+            frameWidth: 40,
+            frameHeight: 40
+        } );
     }
 
     create() {
