@@ -4,6 +4,8 @@ class Scene2 extends Phaser.Scene {
         super( 'playGame' );
         this.lastMoveTime = 0;
         this.timeInterval = 150;
+        this.lastPowerUpSpawnTime = 0;
+        this.lastPowerUpCollectTime = 0;
         this.direction = "right";
         this.snakeSize = gameSettings.gridWidth;
         this.levelUpScore = 260;
@@ -65,12 +67,23 @@ class Scene2 extends Phaser.Scene {
 
         this.physics.add.collider(this.snake, this.apple, this.collectApple, null, this);
         this.physics.add.collider(this.snake,this.powerUps, this.collectPowerup,null,this);
-
+        this.powerUps.visible = false;
     }
 
     update(time) {
+        console.log(gameSettings.powerUpInterval)
+        if(this.lastPowerUpSpawnTime == 0) {
+            this.lastPowerUpSpawnTime = time;
+        }
+        if(time > this.lastPowerUpSpawnTime + gameSettings.powerUpInterval) {
+            this.powerUps.visible = false;
+            this.powerUps.body.enable = false;
+        } if (time > this.lastPowerUpSpawnTime + gameSettings.powerUpInterval + 5000) {
+            this.resetpowerUpPos(this.powerUps)
+            this.lastPowerUpSpawnTime = time;
+        }
 
-        if(score == this.levelUpScore) {
+        if(score >= 100) {
             this.levelUp();
         }
 
@@ -194,13 +207,16 @@ class Scene2 extends Phaser.Scene {
     {
         score += 20;
         scoreText.setText('Score: ' +score);
-         this.snake.setVelocityX(0);
-         this.snake.setVelocityY(0);
-         this.resetpowerUpPos(powerUps);
+        this.timeInterval = 150;
+        powerUps.visible = false;
+        powerUps.body.enable = false;
+         //this.resetpowerUpPos(powerUps);
      }
-     resetpowerUpPos(powerUps)
-    
-     {
+
+     resetpowerUpPos(powerUps) {
+
+        powerUps.visible = true;
+        powerUps.body.enable = true;
         let x = Phaser.Math.Between( 1, totalGridsX - 1) * gameSettings.gridWidth;
         let y = Phaser.Math.Between( 1, totalGridsY - 1) * gameSettings.gridWidth;
          powerUps.setVelocityX(0);

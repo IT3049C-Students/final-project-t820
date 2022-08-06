@@ -3,7 +3,8 @@ let gameSettings = {
     gridWidth: 40,
     score: 0,
     level: 1,
-    totalLevels: 5
+    totalLevels: 5,
+    powerUpInterval: 5000
 }
 
 let config = {

@@ -26,7 +26,8 @@ class Scene3 extends Phaser.Scene {
             playerSpeed: 150,
             gridWidth: 40,
             score: 0,
-            level: 1
+            level: 1,
+            powerUpInterval: 5000
         }
         if ( Phaser.Input.Keyboard.JustDown( this.spacebar ) ) {
             this.scene.start( 'playGame' );

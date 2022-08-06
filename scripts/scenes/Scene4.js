@@ -23,9 +23,10 @@ class Scene4 extends Phaser.Scene {
 
     update() {
         if ( Phaser.Input.Keyboard.JustDown( this.spacebar ) ) {
-            gameSettings.playerSpeed -= 10;
+            gameSettings.playerSpeed -= 35;
             gameSettings.gridWidth -= 5;
             gameSettings.level++;
+            gameSettings.powerUpInterval = 5000 * gameSettings.level;
             this.scene.start( 'playGame' );
         } 
     }
