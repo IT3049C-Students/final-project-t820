@@ -13,6 +13,10 @@ class Scene1 extends Phaser.Scene {
             frameWidth: 40,
             frameHeight: 40
         } );
+        this.load.spritesheet( 'powerUps', 'images/coin.png',  {
+            frameWidth: 40,
+            frameHeight: 40
+        } );
     }
 
     create() {
@@ -22,6 +26,7 @@ class Scene1 extends Phaser.Scene {
         this.add.text( 295, 340, "Press Spacebar to Start", {
             font: 'bold 15pt Arial',
         } );
+
         this.spacebar = this.input.keyboard.addKey( Phaser.Input.Keyboard.KeyCodes.SPACE );
     }
 
