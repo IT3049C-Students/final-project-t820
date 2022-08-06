@@ -3,6 +3,7 @@ class Scene2 extends Phaser.Scene {
     constructor() {
         super( 'playGame' );
         this.lastMoveTime = 0;
+
         this.timeInterval = 150;
         this.lastPowerUpSpawnTime = 0;
         this.lastPowerUpCollectTime = 0;
@@ -37,10 +38,10 @@ class Scene2 extends Phaser.Scene {
         this.apple.setVelocityX(0);
         this.apple.setVelocityY(0);
 
+
         this.powerUps = this.physics.add.sprite(config.width/ 2, config.height / 2 - 20, "powerUps");
         this.powerUps.setVelocityX(0);
         this.powerUps.setVelocityY(0);
-
         
         let appleCount = 0;
         globalThis.score = 0;
@@ -48,12 +49,16 @@ class Scene2 extends Phaser.Scene {
         globalThis.gameOver = false;
         this.snake = this.physics.add.sprite(  gameSettings.gridWidth, gameSettings.gridWidth, 'snake' );
 
+
         if(gameSettings.gridWidth != 40) {
             scale = gameSettings.gridWidth / 40;
             this.snake.setScale(scale);
             this.apple.setScale(scale);
             this.powerUps.setScale(scale);
         }
+
+        this.snake = this.physics.add.sprite( /*config.width / 2*/ 40, /*config.height / 2 - 60*/40, 'snake' );
+
 
         // Tried using a green rectangle as a snake thinking it might make it easier to add a growth function.
         
@@ -66,6 +71,7 @@ class Scene2 extends Phaser.Scene {
         this.snake.setCollideWorldBounds();
 
         this.physics.add.collider(this.snake, this.apple, this.collectApple, null, this);
+
         this.physics.add.collider(this.snake,this.powerUps, this.collectPowerup,null,this);
         this.powerUps.visible = false;
     }
@@ -120,6 +126,14 @@ class Scene2 extends Phaser.Scene {
             this.gameEnd();
         } else if ( this.snake.y < gameSettings.gridWidth || this.snake.y > config.height-gameSettings.gridWidth  ) {
             this.gameEnd();
+
+    }
+
+    update(time) {
+        if ( this.cursorKeys.left.isDown ) {
+            this.direction = "left"
+        } else if ( this.cursorKeys.right.isDown ) {
+            this.direction = "right"
         }
     }
     gameEnd() {
@@ -134,6 +148,16 @@ class Scene2 extends Phaser.Scene {
         this.powerUps.visible = false;
         this.powerUps.visible= false;
 
+
+        // up and down
+        if ( this.cursorKeys.up.isDown ) {
+            this.direction = "up"
+        } else if ( this.cursorKeys.down.isDown ) {
+            this.direction = "down"
+        }
+        if(time > this.lastMoveTime + this.timeInterval) {
+            this.lastMoveTime = time;
+            this.snakeMoveManager(this.direction);
         }
     snakeMoveManager(direction) {
         if(this.direction == "left") {
@@ -188,6 +212,7 @@ class Scene2 extends Phaser.Scene {
                     }
                 }
 
+
             }
     }
 
@@ -199,6 +224,31 @@ class Scene2 extends Phaser.Scene {
             this.body.push(this.add.rectangle(this.snake.x, this.snake.y, 32* scale, 32* scale, 0x00ffff));
         }
 
+        // snake ran into wall, reset position of snake
+        // the coordinates code can be replaced by the gameOver function
+        if ( this.snake.x < 40 || this.snake.x > 760 ) {
+            this.snake.x = 40;
+            this.snake.y = 40;
+        } else if ( this.snake.y < 40 || this.snake.y > 560  ) {
+            this.snake.x = 40;
+            this.snake.y = 40;
+        }
+
+    }
+
+    snakeMoveManager(direction) {
+            if(this.direction == "left") {
+                this.snake.x -= gameSettings.gridWidth;
+                } else if (direction =="right") {
+                this.snake.x += gameSettings.gridWidth;
+                } else if (direction == "down") {
+                this.snake.y += gameSettings.gridWidth;
+                } else {
+                this.snake.y -= gameSettings.gridWidth;
+        }
+    }
+
+    collectApple(snake, apple) {
         score += 10;
         scoreText.setText('Score: ' + score);
         this.resetApplePos(apple);
@@ -212,6 +262,7 @@ class Scene2 extends Phaser.Scene {
         powerUps.body.enable = false;
          //this.resetpowerUpPos(powerUps);
      }
+
 
      resetpowerUpPos(powerUps) {
 
@@ -230,11 +281,18 @@ class Scene2 extends Phaser.Scene {
         // sets the new apple within the grid that the snake moves through
         let x = Phaser.Math.Between( 1, totalGridsX - 1) * gameSettings.gridWidth;
         let y = Phaser.Math.Between( 1, totalGridsY - 1) * gameSettings.gridWidth;
+
+    resetApplePos(apple) {
+        // sets the new apple within the grid that the snake moves through
+        let x = Phaser.Math.Between( 1, 19 ) * 40;
+        let y = Phaser.Math.Between( 1, 14 ) * 40;
+
         apple.setVelocityX(0);
         apple.setVelocityY(0);
         apple.y = y;
         apple.x = x;
     }
+
 
     levelUp() {
         console.log("levelup triggered")
