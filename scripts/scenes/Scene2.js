@@ -38,7 +38,7 @@ class Scene2 extends Phaser.Scene {
         this.powerUps = this.physics.add.sprite(config.width/ 2, config.height / 2 - 20, "powerUps");
         this.powerUps.setVelocityX(0);
         this.powerUps.setVelocityY(0);
-        
+
         
         let appleCount = 0;
         globalThis.score = 0;
@@ -65,6 +65,7 @@ class Scene2 extends Phaser.Scene {
 
         this.physics.add.collider(this.snake, this.apple, this.collectApple, null, this);
         this.physics.add.collider(this.snake,this.powerUps, this.collectPowerup,null,this);
+
     }
 
     update(time) {
@@ -118,6 +119,7 @@ class Scene2 extends Phaser.Scene {
         this.snake.visible = false;
         this.apple.visible = false;
         this.powerUps.visible = false;
+        this.powerUps.visible= false;
 
         }
     snakeMoveManager(direction) {
@@ -232,6 +234,7 @@ class Scene2 extends Phaser.Scene {
         this.physics.pause();
         this.snake.visible = false;
         this.apple.visible = false;
+        this.powerUps.visible = false;
 
         }
 
