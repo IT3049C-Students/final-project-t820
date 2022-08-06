@@ -18,7 +18,13 @@ class Scene2 extends Phaser.Scene {
         let appleCount = 0;
         globalThis.score = 0;
         globalThis.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' });
-
+        globalThis.gameOver = false;
+        globalThis.gameOverText = this.add.text(400, 300, 'Game Over', { fontSize: '64px', fill: '#000' })
+        globalThis.gameOverText.setOrigin(0.5);
+        globalThis.gameOverText.visible = false;
+        globalThis.gameOverScore = this.add.text(400, 400, 'Your Final Score: ', { fontSize: '48px', fill: '#000' })
+        globalThis.gameOverScore.setOrigin(0.5);
+        globalThis.gameOverScore.visible = false;
         this.snake = this.physics.add.sprite( /*config.width / 2*/ 40, /*config.height / 2 - 60*/40, 'snake' );
 
         // Tried using a green rectangle as a snake thinking it might make it easier to add a growth function.
@@ -67,14 +73,21 @@ class Scene2 extends Phaser.Scene {
         // the coordinates code can be replaced by the gameOver function
         //END GAME HERE
         if ( this.snake.x < 40 || this.snake.x > 760 ) {
-            this.snake.x = 40;
-            this.snake.y = 40;
+            this.gameEnd();
         } else if ( this.snake.y < 40 || this.snake.y > 560  ) {
-            this.snake.x = 40;
-            this.snake.y = 40;
+            this.gameEnd();
         }
     }
-
+    gameEnd() {
+        this.physics.pause();
+        this.snake.visible = false;
+        this.apple.visible = false;
+        globalThis.gameOver = true;
+        globalThis.scoreText.visible = false;
+        globalThis.gameOverText.visible = true;
+        globalThis.gameOverScore.visible = true;
+        globalThis.gameOverScore.setText('Your Final Score: ' + score);
+        }
     snakeMoveManager(direction) {
         if(this.direction == "left") {
             this.snake.x -= gameSettings.gridWidth;
@@ -125,8 +138,7 @@ class Scene2 extends Phaser.Scene {
                     if(this.snake.x == this.body[index].x && this.snake.y == this.body[index].y) {
                         //END GAME HERE
                         console.log("game over");
-                        this.snake.x = 40;
-                        this.snake.y = 40;
+                        this.gameEnd();
                     }
                 }
 
