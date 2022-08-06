@@ -1,7 +1,7 @@
-class Scene3 extends Phaser.Scene {
+class Scene5 extends Phaser.Scene {
 
     constructor() {
-        super( 'endGame' );
+        super( 'gameComplete' );
     }
 
     preload() {
@@ -10,18 +10,19 @@ class Scene3 extends Phaser.Scene {
 
     create() {
 
-        this.add.text(400, 200, 'Game Over', { fontSize: '64px', fill: '#000' }).setOrigin(0.5);
+        this.add.text(400, 200, 'Congratulations!', { fontSize: '64px', fill: '#000' }).setOrigin(0.5);
 
-        this.add.text(400, 300, 'Your Final Score: ' + gameSettings.score, { fontSize: '48px', fill: '#000' }).setOrigin(0.5);
+        this.add.text(400, 300, 'You have beat the game', { fontSize: '48px', fill: '#000' }).setOrigin(0.5);
 
         this.spacebar = this.input.keyboard.addKey( Phaser.Input.Keyboard.KeyCodes.SPACE );
 
-        this.add.text( 400, 400, "Press Spacebar to Play Again", {
+        this.add.text( 400, 400, "Press Spacebar to Start Over Again", {
             font: 'bold 15pt Arial',
         } ).setOrigin(0.5);;
     }
 
     update() {
+
         gameSettings = {
             playerSpeed: 150,
             gridWidth: 40,
